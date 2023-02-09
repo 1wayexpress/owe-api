@@ -1,0 +1,30 @@
+@url = 'http://localhost:3333/api'
+
+GET /
+
+# Drr
+
+GET /checkConfigs
+
+
+POST {{url}}/smsService/sendSMS
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjU1NzUxMDQ1LCJzdWIiOiI2YjlkOTQ3OC03ZmQwLTRhYmMtOGNiYS0zNzU3YzgyMjVhZTMiLCJlbWFpbCI6Inlub2FoQDF3YXlleHByZXNzLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiY29kZSI6Ik9XRS1LRVkiLCJuYW1lIjoiWWFubmljayBOb2FoIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJ0b2tlbiI6IsOKelx1MDAxYcKHXFxcdTAwMWHDicOsacKtw6sscsKJIn0sInJvbGUiOiJhdXRoZW50aWNhdGVkIn0.tj9TigE1JB-2cXKgrD-2oXxaquBj85UnOZEzVfOmJik
+
+{
+   "phone": "2145241763",
+   "message": "Hi Some ABC Driver,\nHere is your assigned shipment from 1-Way Express:\nShipment Pro #: 981234\nApp Link: http://localhost:6003//sign-in/2145241763/981234"
+}
+
+POST {{url}}/emailService/sendEmail
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjU1NzUxMDQ1LCJzdWIiOiI2YjlkOTQ3OC03ZmQwLTRhYmMtOGNiYS0zNzU3YzgyMjVhZTMiLCJlbWFpbCI6Inlub2FoQDF3YXlleHByZXNzLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiY29kZSI6Ik9XRS1LRVkiLCJuYW1lIjoiWWFubmljayBOb2FoIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJ0b2tlbiI6IsOKelx1MDAxYcKHXFxcdTAwMWHDicOsacKtw6sscsKJIn0sInJvbGUiOiJhdXRoZW50aWNhdGVkIn0.tj9TigE1JB-2cXKgrD-2oXxaquBj85UnOZEzVfOmJik
+
+{
+    "email": "radesa.eqicit@rungel.net",
+    "templateData": {
+        "customerProNumber": "981234",
+        "driverName": "Some ABC Driver",
+        "customerName": "Bendix Corp "
+    },
+    "templateId": "SHIPMENT_DRIVER",
+    "subject": "Driver Shipment Request"
+}
