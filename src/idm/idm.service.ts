@@ -20,46 +20,36 @@ export class IdmService {
     }
 
     const code = Buffer.from(payload.email, 'base64').toString('binary');
-    const { data: user, error: errorMsg } =
-      await this.supabase.auth.api.createUser({
+    const { data, error } = await this.supabase.auth.admin.createUser({
+      email: payload.email,
+      password: payload.password,
+      phone: payload.phone,
+      user_metadata: {
+        code: 'OWE-KEY',
+        token: code,
+        name: payload.name,
+        role: payload.role,
+        phone: payload.phone,
         email: payload.email,
-        password: payload.password,
-        user_metadata: {
-          code: 'OWE-KEY',
-          token: code,
-          name: payload.name,
-          role: payload.role,
-        },
-      });
-    if (!errorMsg) {
-      await this.supabase.auth.api.inviteUserByEmail(user.email);
-      const res = await this.supabase.from('userInfos').insert([
-        {
-          id: user.id,
-          name: payload.name,
-          created_by: payload.created_by,
-          phone: payload.phone,
-          role: payload.role,
-          email: payload.email,
-          permissions: payload.permissions,
-          avatar: payload.avatar,
-          driverPay: payload.driverPay ?? 0,
-        },
-      ]);
-      return {
-        data: res.data,
-        error: res.error,
-      };
+        created_by: payload.created_by,
+        permissions: payload.permissions,
+        avatar: payload.avatar,
+        driverPay: payload.driverPay ?? 0,
+      },
+    });
+
+    if (data.user) {
+      await this.supabase.auth.admin.inviteUserByEmail(data.user.email);
     }
     return {
-      data: user,
-      error: errorMsg,
+      data: data.user,
+      error: error?.message,
     };
   }
 
   async checkExistingEmail(email: string) {
     const { data, error } = await this.supabase
-      .from<UserInfo>('userInfos')
+      .from('userInfos')
       .select('*')
       .ilike('email', email.trim())
       .limit(1);
@@ -79,38 +69,20 @@ export class IdmService {
     };
   }
 
-  async findAll() {
-    const res = await this.supabase.from<UserInfo>('userInfos');
-    return {
-      data: res.data,
-      error: res.error,
-    };
-  }
-
-  async findOne(id: string) {
-    const userInfo = await this.supabase
-      .from<UserInfo>('userInfos')
-      .select()
-      .eq('id', id)
-      .single();
-    return {
-      data: userInfo.data,
-      error: userInfo.error,
-    };
-  }
-
   async update(id: string, payload: Partial<UserInfo>) {
     if (payload.email) {
       const code = Buffer.from(payload.email, 'base64').toString('binary');
-      const { data: user, error } = await this.supabase.auth.api.updateUserById(
+      const { data: user, error } = await this.supabase.auth.admin.updateUserById(
         id,
         {
           email: payload.email,
+          phone: payload.phone,
           user_metadata: {
             code: 'OWE-KEY',
             token: code,
             name: payload.name,
             role: payload.role,
+            phone: payload.phone,
           },
         },
       );
@@ -122,9 +94,9 @@ export class IdmService {
       }
     }
     const res = await this.supabase
-      .from<UserInfo>('userInfos')
+      .from('userInfos')
       .update(payload)
-      .match({ id });
+      .match({ id }).select('*');
     return {
       data: res.data,
       error: res.error,
@@ -133,7 +105,7 @@ export class IdmService {
 
   async remove(id: string) {
     const res = await this.supabase
-      .from<UserInfo>('userInfos')
+      .from('userInfos')
       .delete()
       .match({ id });
     if (res.error) {
@@ -142,7 +114,7 @@ export class IdmService {
         error: res.error,
       };
     }
-    const { data: user, error } = await this.supabase.auth.api.deleteUser(id);
+    const { data: user, error } = await this.supabase.auth.admin.deleteUser(id);
     return {
       data: user,
       error,

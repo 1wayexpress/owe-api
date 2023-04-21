@@ -40,7 +40,7 @@ export class AuthOneService {
 			return await this.signIn(this.driverAuth.email, this.driverAuth.password);
 		}
 		return await this.signIn(payload.key, payload.code);
-  }
+	}
 
 	async signInClient(payload: { key: string; code: string }) {
 		const { data, error } = await this.checkLoginRecordExists(payload.key, payload.code);
@@ -54,17 +54,17 @@ export class AuthOneService {
 	}
 
 	async signIn(email: string, password: string) {
-		const auth = await this.supabase.auth.signIn({ email, password });
-		if (auth.session) {
+		const auth = await this.supabase.auth.signInWithPassword({ email, password });
+		if (auth.data.session) {
 			return {
-				data: { ...auth.session },
+				data: { ...auth.data.session },
 				error: null
 			};
 		}
 		return {
 			error: auth.error
 		};
-  }
+	}
 
 
 	async checkLoginRecordExists(key: string, code: string) {

@@ -30,7 +30,7 @@
     "@nestjs/platform-express": "^8.4.7",
     "@ntegral/nestjs-sendgrid": "^1.0.0",
     "@sendgrid/mail": "^7.7.0",
-    "@supabase/supabase-js": "^1.33.2",
+    "@supabase/supabase-js": "^2.21.0",
     "moment": "^2.29.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
